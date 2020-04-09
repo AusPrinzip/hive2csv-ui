@@ -29,12 +29,7 @@ const UserPage = (props) => {
 function App(props) {
   const { classes } = props;
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/" component={UserPage}/>
-        <Route path="/:tag/:author/:permlink" component={ UserPage } />
-      </Switch>
-    </Router>
+    <UserPage></UserPage>
   );
 }
 

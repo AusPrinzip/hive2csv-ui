@@ -133,7 +133,7 @@ export default function SimpleSelect() {
             </form>
           </Grid>
           <Grid item xs>
-            <Button href={encodeURI("https://thawing-chamber-12594.herokuapp.com/api/v1/csv?operation=transfer&account=" + account + '&from=' + selectedFromDate.toString() + '&until=' + selectedUntilDate.toString()) } variant="contained">Download</Button>
+            <Button href={encodeURI("https://thawing-chamber-12594.herokuapp.com/api/v1/csv?operation=" + operation + "&account=" + account + '&from=' + selectedFromDate.toString() + '&until=' + selectedUntilDate.toString()) } variant="contained">Download</Button>
           </Grid>
       </Grid>
     </div>
