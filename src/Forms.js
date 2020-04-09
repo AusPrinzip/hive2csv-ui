@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -18,6 +18,8 @@ import TextField from '@material-ui/core/TextField';
 
 import Grid from '@material-ui/core/Grid';
 
+import axios from 'axios'
+
 const HOUR = 60 * 60 * 1000
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -35,10 +37,15 @@ const useStyles = makeStyles((theme) => ({
 export default function SimpleSelect() {
   const classes = useStyles();
   const [operation, setOperation] = React.useState('');
-
-  const [selectedFromDate, setSelectedFromDate] = React.useState(new Date() - 24 * HOUR);
+  const [account, setAccount] = React.useState('');
+  const [selectedFromDate, setSelectedFromDate] = React.useState(new Date(new Date().getTime() - 24 * HOUR));
   const [selectedUntilDate, setSelectedUntilDate] = React.useState(new Date());
+  const [accountError, setAccountError] = React.useState(false);
+  const [selectError, setSelectError] = React.useState(false);
 
+  const handleAccountInput = (event) => {
+    setAccount(event.target.value)
+  };
   const handleFromDateChange = (date) => {
     setSelectedFromDate(date);
     console.log(selectedFromDate)
@@ -51,6 +58,24 @@ export default function SimpleSelect() {
     setOperation(event.target.value);
   };
 
+
+
+  const handleButtonClick = (event) => {
+    if (!account.length) {
+      return setAccountError(true)
+    } else {
+      setAccountError(false)
+    }
+    if (!operation) {
+      return setSelectError(true)
+    } else {
+      setSelectError(false)
+    }
+    let params = { operation: operation, from: selectedFromDate, until: selectedUntilDate, account: account}
+    axios.get('http://localhost:5000/api/v1', { params: params })
+    .then((res) => console.log(res))
+  }
+
   return (
     <div className={classes.root}>
       <Grid container spacing={2}>
@@ -58,7 +83,7 @@ export default function SimpleSelect() {
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
               margin="normal"
-              id="date-picker-dialog"
+              id="date-picker-dialog#1"
               label="From"
               format="MM/dd/yyyy"
               value={selectedFromDate}
@@ -73,7 +98,7 @@ export default function SimpleSelect() {
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
               margin="normal"
-              id="date-picker-dialog"
+              id="date-picker-dialog#2"
               label="Until"
               format="MM/dd/yyyy"
               value={selectedUntilDate}
@@ -94,6 +119,7 @@ export default function SimpleSelect() {
               id="demo-simple-select"
               value={operation}
               onChange={handleChange}
+              error={selectError}
             >
               <MenuItem value={'transfer'}>Transfer</MenuItem>
               <MenuItem value={'account_create'}>Account Create</MenuItem>
@@ -103,11 +129,11 @@ export default function SimpleSelect() {
           </Grid>
           <Grid item xs>
             <form className={classes.root} noValidate autoComplete="off">
-              <TextField id="account" label="Account" />
+              <TextField required error={accountError} onChange={handleAccountInput} id="account" label="Account"/>
             </form>
           </Grid>
           <Grid item xs>
-            <Button variant="contained">Request</Button>
+            <Button href={encodeURI("http://localhost:5000/api/v1/csv?operation=transfer&account=" + account + '&from=' + selectedFromDate.toString() + '&until=' + selectedUntilDate.toString()) } variant="contained">Request</Button>
           </Grid>
       </Grid>
     </div>
