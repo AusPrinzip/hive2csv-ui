@@ -42,7 +42,8 @@ export default function SimpleSelect() {
   const [selectedUntilDate, setSelectedUntilDate] = React.useState(new Date());
   const [accountError, setAccountError] = React.useState(false);
   const [selectError, setSelectError] = React.useState(false);
-
+  const rootAPI = process.env.NODE_ENV == 'production' ? "https://thawing-chamber-12594.herokuapp.com" : "http://localhost:5000"
+  console.log(process.env.NODE_ENV)
   const handleAccountInput = (event) => {
     setAccount(event.target.value)
   };
@@ -122,8 +123,10 @@ export default function SimpleSelect() {
               error={selectError}
             >
               <MenuItem value={'transfer'}>Transfer</MenuItem>
-              <MenuItem value={'account_create'}>Account Create</MenuItem>
+              <MenuItem value={'create_claimed_account'}>Account Create</MenuItem>
               <MenuItem value={'comment'}>Comment</MenuItem>
+              <MenuItem value={'curation_reward'}>Curation Reward</MenuItem>
+              <MenuItem value={'comment_benefactor_reward'}>Benefactor Reward</MenuItem>
             </Select>
           </FormControl>
           </Grid>
@@ -133,7 +136,7 @@ export default function SimpleSelect() {
             </form>
           </Grid>
           <Grid item xs>
-            <Button href={encodeURI("https://thawing-chamber-12594.herokuapp.com/api/v1/csv?operation=" + operation + "&account=" + account + '&from=' + selectedFromDate.toString() + '&until=' + selectedUntilDate.toString()) } variant="contained">Download</Button>
+            <Button href={encodeURI(rootAPI + "/api/v1/csv?operation=" + operation + "&account=" + account + '&from=' + selectedFromDate.toString() + '&until=' + selectedUntilDate.toString()) } variant="contained">Download</Button>
           </Grid>
       </Grid>
     </div>
