@@ -38,7 +38,7 @@ export default function SimpleSelect() {
   const classes = useStyles();
   const [operation, setOperation] = React.useState('');
   const [account, setAccount] = React.useState('');
-  const [selectedFromDate, setSelectedFromDate] = React.useState(new Date(new Date().getTime() - 24 * HOUR));
+  const [selectedFromDate, setSelectedFromDate] = React.useState(new Date(new Date().getTime() - 7 * 24 * HOUR));
   const [selectedUntilDate, setSelectedUntilDate] = React.useState(new Date());
   const [accountError, setAccountError] = React.useState(false);
   const [selectError, setSelectError] = React.useState(false);
